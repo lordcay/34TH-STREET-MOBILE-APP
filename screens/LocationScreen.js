@@ -481,9 +481,10 @@ const LocationScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      
       <View style={styles.header}>
         <View style={styles.iconContainer}>
-          <MaterialCommunityIcons name="map-marker" size={26} color="black" />
+          <MaterialCommunityIcons name="map-marker" size={26} color="#ffb60a" />
         </View>
         <Image
           style={styles.logo}
@@ -533,7 +534,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    borderColor: 'black',
+    borderColor: '#581845',
     borderWidth: 2,
     justifyContent: 'center',
     alignItems: 'center',

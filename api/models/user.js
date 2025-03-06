@@ -9,6 +9,7 @@ const userSchema = new Schema({
     },
     lastName: {
       type: String,
+      required: true,
     },
     email: {
       type: String,
@@ -19,25 +20,28 @@ const userSchema = new Schema({
       type: String,
       required: true,
     },
+    isVerified: { type: Boolean, default: false }, // New field for email verification
+    verificationOTP: { type: String }, // Store OTP
+    otpExpiresAt: { type: Date }, // OTP expiration time
     gender: {
       type: String,
-       required: true,
+      //  required: true,
     },
     dateOfBirth: {
       type: String,
-      required: true,
+      // required: true,
     },
     type: {
       type: String,
-      required: true,
+      // required: true,
     },
     location: {
       type: String,
-      required: true,
+      // required: true,
     },
     hometown: {
       type: String,
-      required: true,
+      // required: true,
     },
     datingPreferences: [
       {
@@ -46,7 +50,7 @@ const userSchema = new Schema({
     ],
     lookingFor: {
       type: String,
-      required: true,
+      // required: true,
     },
     imageUrls: [
       {
@@ -57,11 +61,11 @@ const userSchema = new Schema({
       {
         question: {
           type: String,
-          required: true,
+          // required: true,
         },
         answer: {
           type: String,
-          required: true,
+          // required: true,
         },
       },
     ],
@@ -131,6 +135,14 @@ const userSchema = new Schema({
       // Define notification preferences here
     },
   });
+
+
+  // Hash password before saving user
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
+});
 
   // Create the User model
 const User = mongoose.model('User', userSchema);

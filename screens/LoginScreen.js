@@ -7,6 +7,7 @@ import {
   TextInput,
   Pressable,
   KeyboardAvoidingView,
+  ImageBackground,
 } from 'react-native';
 import React, {useState,useEffect,useContext} from 'react';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -30,64 +31,131 @@ const LoginScreen = () => {
   console.log(token)
 
   useEffect(() => {
-    // Check if the token is set and not in loading state
-    if (token) {
-      // Navigate to the main screen
-      navigation.navigate('MainStack', { screen: 'Main' });
-    }
-  }, [token, navigation]);
-  const signInUser = async() => {
+    const checkToken = async () => {
+      const storedToken = await AsyncStorage.getItem('token');
+      if (storedToken) {
+        setToken(storedToken);
+        // navigation.navigate('MainStack', { screen: 'Main' });
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'MainStack' }],
+        });
+      }
+    };
+    checkToken();
+  }, []);
+  
+
+  // useEffect(() => {
+  //   // Check if the token is set and not in loading state
+  //   if (token) {
+  //     // Navigate to the main screen
+  //     navigation.navigate('MainStack', { screen: 'Main' });
+  //   }
+  // }, [token, navigation]);
+  
+
+  const signInUser = async () => {
     setOption('Sign In');
 
+    if (!email || !password) {
+      Alert.alert('Error', 'Please enter both email and password');
+      return;
+    }
 
-      try {
-        console.log(email);
-        console.log(password);
-        const user = {
-          email: email,
-          password: password,
-        };
-        const response = await axios.post('http://192.168.0.169:4000/login', user);
-        console.log('Dfdfd');
-        const token = response.data.token;
-        
-        // Store the token in AsyncStorage
-        await AsyncStorage.setItem('token', token);
+    try {
+      console.log(`🔹 Logging in with email: ${email}`);
 
-        setToken(token)
-        // navigation.replace('Main');
-      } catch (error) {
-        console.log('error',error);
+      const response = await axios.post(
+        'http://192.168.0.169:4000/accounts/authenticate',
+        { email, password }
+      );
+
+      console.log("✅ Login Successful:", response.data);
+
+      const { jwtToken } = response.data; // Backend sends 'jwtToken'
+      if (!jwtToken) {
+        throw new Error('Token not received!');
       }
-  
+
+      await AsyncStorage.setItem('token', jwtToken);
+      setToken(jwtToken);
+
+      Alert.alert('Success', 'Login successful!');
+
+      // Navigate to MainStack
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'MainStack' }],
+      });
+    } catch (error) {
+      console.error('❌ Login Error:', error?.response?.data || error.message);
+      Alert.alert('Error', error?.response?.data?.message || 'Login failed. Try again.');
+    }
   };
+  // const signInUser = async() => {
+  //   setOption('Sign In');
+
+
+  //     try {
+  //       console.log(email);
+  //       console.log(password);
+  //       const user = {
+  //         email: email,
+  //         password: password,
+  //       };
+  //       const response = await axios.post('http://192.168.0.169:4000/accounts/authenticate', user);
+  //       console.log('Dfdfd');
+  //       const token = response.data.token;
+        
+  //       // Store the token in AsyncStorage
+  //       await AsyncStorage.setItem('token', token);
+
+  //       setToken(token)
+  //       // navigation.replace('Main');
+  //     } catch (error) {
+  //       console.log('error',error);
+  //     }
+  
+  // };
   const createAccount = () => {
     setOption('Create account');
 
     navigation.navigate('Basic');
   };
-  const handleLogin = () => {
-    const user = {
-      email: email,
-      password: password,
-    };
-    axios.post('http://192.168.0.169:4000/login', user).then(response => {
-      console.log(response);
-      const token = response.data.token;
-      AsyncStorage.setItem('auth', token);
-      router.replace('/(authenticate)/select');
-    });
-  };
+  // const handleLogin = () => {
+  //   const user = {
+  //     email: email,
+  //     password: password,
+  //   };
+  //   axios.post('http://192.168.0.169:4000/login', user).then(response => {
+  //     console.log(response);
+  //     const token = response.data.token;
+  //     AsyncStorage.setItem('auth', token);
+  //     router.replace('/(authenticate)/select');
+  //   });
+  // };
   return (
+    <ImageBackground 
+    source={require('../assets/bg2.jpg')} 
+    style={{
+      flex: 1,
+      width: '100%',
+      height: '100%',
+      resizeMode: 'cover',
+    }}
+  >
+  
     <SafeAreaView
-      style={{flex: 1, backgroundColor: 'white', alignItems: 'center'}}>
+      style={{flex: 1,  alignItems: 'center'}}>
       <View
-        style={{
-          height: 200,
-          backgroundColor: '#581845',
-          width: '100%',
-          borderBottomLeftRadius: 100,
-          borderBottomRightRadius: 100,
+       style={{
+        height: 200,
+        backgroundColor: '#581845',
+        width: '100%',
+        borderBottomLeftRadius: 100,
+        borderBottomRightRadius: 100,
+        top: -50,
         }}>
         <View
           style={{
@@ -96,7 +164,7 @@ const LoginScreen = () => {
             marginTop: 25,
           }}>
           <Image
-            style={{width: 150, height: 80, resizeMode: 'contain'}}
+            style={{width: 150, height: 80, resizeMode: 'contain', top: 20,}}
             source={{
               uri: 'https://cdn-icons-png.flaticon.com/128/4310/4310217.png',
             }}
@@ -112,10 +180,22 @@ const LoginScreen = () => {
           }}>
           34TH STREET
         </Text>
+        <Text
+          style={{
+            marginTop: 10,
+            textAlign: 'center',
+            fontSize: 18,
+            fontFamily: 'GeezaPro-Bold',
+            color: '#ffb60a',
+            fontWeight: 'bold',
+          }}>
+          build bonds across schools.
+        </Text>
+        
       </View>
 
       <KeyboardAvoidingView>
-        <View style={{alignItems: 'center'}}>
+        {/* <View style={{alignItems: 'center'}}>
           <Text
             style={{
               fontSize: 20,
@@ -125,7 +205,7 @@ const LoginScreen = () => {
             }}>
             build bonds across schools.
           </Text>
-        </View>
+        </View> */}
 
         <View
           style={{
@@ -214,7 +294,7 @@ const LoginScreen = () => {
                   alignItems: 'center',
                   justifyContent: 'space-between',
                 }}>
-                <Text>Keep me logged in</Text>
+                <Text style={{color: '#ffb600', fontWeight: '800'}}>Keep me logged in</Text>
 
                 <Text style={{color: '#007FFF', fontWeight: '500'}}>
                   Forgot Password
@@ -268,7 +348,7 @@ const LoginScreen = () => {
             onPress={signInUser}
             style={{
               width: 300,
-              backgroundColor: option == 'Sign In' ? '#581845' : 'transparent',
+              backgroundColor: option == 'Create account' ? '#581845' : 'transparent',
               borderRadius: 6,
               marginLeft: 'auto',
               marginRight: 'auto',
@@ -279,8 +359,8 @@ const LoginScreen = () => {
             <Text
               style={{
                 textAlign: 'center',
-                color: option == 'Sign In' ? 'white' : 'black',
-                fontSize: 16,
+                color: option == 'Sign In' ? 'white' : '#ffb60a',
+                fontSize: 18,
                 fontWeight: 'bold',
               }}>
               Sign In
@@ -289,9 +369,13 @@ const LoginScreen = () => {
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
+    </ImageBackground>
   );
 };
 
 export default LoginScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  
+});
+

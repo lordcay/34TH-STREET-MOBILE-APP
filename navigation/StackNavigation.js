@@ -233,6 +233,7 @@ import ProfileDetailsScreen from '../screens/ProfileDetailsScreen';
 import Password from '../screens/Password';
 import SendLikeScreen from '../screens/SendLikeScreen';
 import HandleLikeScreen from '../screens/HandleLikeScreen';
+import VerifyOTPScreen from '../screens/VerifyOTPScreen';
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -426,11 +427,17 @@ const StackNavigator = () => {
         component={PreFinalScreen}
         options={{headerShown: false}}
       />
-      {/* <Stack.Screen
+
+<Stack.Screen
+      name="VerifyOTPScreen"
+      component={VerifyOTPScreen}
+      options={{headerShown: false}}
+    />
+      <Stack.Screen
         name="Main"
         component={BottomTabs}
         options={{headerShown: false}}
-      /> */}
+      />
       {/* Other authentication screens */}
     </Stack.Navigator>
   );

@@ -32,24 +32,69 @@ const LookingFor = () => {
       saveRegistrationProgress('LookingFor', {lookingFor});
     }
     // Navigate to the next screen
-    navigation.navigate('HomeTown');
+    navigation.navigate('Hometown');
   };
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
-     <View style={{marginTop: 90, marginHorizontal: 20}}>
+       <View
+       style={{
+        height: 200,
+        backgroundColor: '#581845',
+        width: '100%',
+        borderBottomLeftRadius: 100,
+        borderBottomRightRadius: 100,
+        top: -50,
+        }}>
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: 25,
+          }}>
+          <Image
+            style={{width: 150, height: 80, resizeMode: 'contain', top: 20,}}
+            source={{
+              uri: 'https://cdn-icons-png.flaticon.com/128/4310/4310217.png',
+            }}
+          />
+        </View>
+        <Text
+          style={{
+            marginTop: 20,
+            textAlign: 'center',
+            fontSize: 23,
+            fontFamily: 'GeezaPro-Bold',
+            color: 'white',
+          }}>
+          34TH STREET
+        </Text>
+        <Text
+          style={{
+            marginTop: 10,
+            textAlign: 'center',
+            fontSize: 18,
+            fontFamily: 'GeezaPro-Bold',
+            color: '#ffb60a',
+            fontWeight: 'bold',
+          }}>
+          build bonds across schools.
+        </Text>
+        
+      </View>
+     <View style={{marginTop: 1, marginHorizontal: 20}}>
      <View style={{flexDirection: 'row', alignItems: 'center'}}>
      <View
             style={{
               width: 44,
               height: 44,
               borderRadius: 22,
-              borderColor: 'black',
+              borderColor: '#581845',
               borderWidth: 2,
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <AntDesign name="hearto" size={22} color="black" />
+            <AntDesign name="hearto" size={22} color="#ffb60a" />
           </View>
           <Image
             style={{width: 100, height: 40}}
