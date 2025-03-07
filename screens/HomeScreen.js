@@ -313,7 +313,7 @@ const HomeScreen = () => {
       try {
         const token = await AsyncStorage.getItem('token');
         if (!token) {
-          navigation.navigate('Register'); // Redirect if no token
+          navigation.navigate('Basic'); // Redirect if no token
           return;
         }
   
@@ -326,14 +326,14 @@ const HomeScreen = () => {
         if (!response.data.user) {
           console.log('User does not exist. Logging out...');
           await AsyncStorage.removeItem('token');
-          navigation.navigate('Register'); // Redirect to registration
+          navigation.navigate('Basic'); // Redirect to registration
         } else {
           setUserId(userId);
         }
       } catch (error) {
         console.error('Error verifying user:', error);
         await AsyncStorage.removeItem('token'); // Remove token if verification fails
-        navigation.navigate('Register'); // Redirect to registration
+        navigation.navigate('Basic'); // Redirect to registration
       }
     };
   
@@ -801,6 +801,20 @@ const HomeScreen = () => {
                     <Ionicons name="heart-outline" size={20} color="black" />
                     <Text>Monogamy</Text>
                   </View>
+                  <Pressable
+                  onPress={() =>
+                    navigation.navigate('ProfileSetupScreen')}
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: 12,
+                    marginTop: 15,
+                    borderBottomWidth: 0.7,
+                    borderBottomColor: '#E0E0E0',
+                    paddingBottom: 10,
+                  }}>
+                    <Text>setup profile</Text>
+                  </Pressable>
                 </View>
 
                 <View>

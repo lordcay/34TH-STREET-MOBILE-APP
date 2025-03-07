@@ -234,6 +234,7 @@ import Password from '../screens/Password';
 import SendLikeScreen from '../screens/SendLikeScreen';
 import HandleLikeScreen from '../screens/HandleLikeScreen';
 import VerifyOTPScreen from '../screens/VerifyOTPScreen';
+import ProfileSetupScreen from '../screens/ProfileSetupScreen';
 
 const StackNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -438,6 +439,12 @@ const StackNavigator = () => {
         component={BottomTabs}
         options={{headerShown: false}}
       />
+     
+      <Stack.Screen
+        name="ProfileSetupScreen"
+        component={ProfileSetupScreen}
+        options={{headerShown: false}}
+      />
       {/* Other authentication screens */}
     </Stack.Navigator>
   );
@@ -474,6 +481,12 @@ const StackNavigator = () => {
           name="ChatRoom"
           component={ChatRoom}
         />
+
+<Stack.Screen
+        name="ProfileSetupScreen"
+        component={ProfileSetupScreen}
+        options={{headerShown: false}}
+      />
       </Stack.Navigator>
     );
   }
